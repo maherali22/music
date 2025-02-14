@@ -1,1 +1,42 @@
 @import "tailwindcss";
+@font-face {
+  font-family: 'Circular';
+  src: url('https://sp-bootstrap.global.ssl.fastly.net/8.12.4/fonts/circular-light.woff2') format('woff2');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Circular';
+  src: url('https://sp-bootstrap.global.ssl.fastly.net/8.12.4/fonts/circular-bold.woff2') format('woff2');
+  font-weight: 700;
+}
+
+.font-circular {
+  font-family: 'Circular', sans-serif;
+}
+.font-circular-bold {
+  font-family: 'Circular', sans-serif;
+  font-weight: 700;
+}
+.bg-spotify-green {
+  background-color: #1ed760;
+}
+.bg-spotify-green-hover {
+  background-color: #1fdf64;
+}
+.transition-colors {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hover\:scale-105 {
+  transition: transform 0.2s ease;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.focus-ring {
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+}

@@ -21,6 +21,7 @@ import {
   getPlaylistById,
   deleteSongFromPlaylist,
   deletePlaylist,
+  getPlaylist,
 } from "../controller/user.Playlist.controller.js";
 import {
   addToLikedSongs,
@@ -52,6 +53,7 @@ Router.get("/songs", userAuthentication, tryCatch(getAllSongs)).get(
 Router.post("/create-playlist", userAuthentication, tryCatch(createPlaylist))
   .get("/get-all-playlist", userAuthentication, tryCatch(getAllPlaylist))
   .get("/get-playlist/:id", userAuthentication, tryCatch(getPlaylistById))
+  .get("/get-playlist", userAuthentication, tryCatch(getPlaylist))
   .delete(
     "/delete-song-from-playlist",
     userAuthentication,

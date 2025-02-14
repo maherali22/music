@@ -41,25 +41,46 @@ const userRegistration = async (req, res, next) => {
   await newUser.save();
 
   const emailTemplate = `
-   <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; text-align: center; color: #333;">
-  <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    <h2 style="color: #2d89ef; margin-bottom: 20px;">Welcome to Our Platform, ${name}!</h2>
-    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
-      Thank you for joining us! To complete your registration, please verify your email by entering the OTP code below:
+  <div style="font-family: Circular, Helvetica, Arial, sans-serif; background-color: #000000; padding: 40px 20px; text-align: center; color: #FFFFFF;">
+  <div style="max-width: 600px; margin: auto; background: #121212; padding: 40px 20px; border-radius: 8px;">
+    <!-- Spotify Logo -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Spotify_New_Full_Logo_RGB_Green.png" 
+         alt="Spotify" 
+         style="width: 180px; margin-bottom: 40px;"
+    />
+    
+    <h2 style="color: #FFFFFF; margin-bottom: 24px; font-size: 32px; font-weight: bold;">
+      Verify your email
+    </h2>
+    
+    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 32px; color: #B3B3B3;">
+      Hi ${name}, enter this verification code in the app to verify your email address and start enjoying Spotify:
     </p>
-    <div style="background-color: #f1f5fc; padding: 10px; border-radius: 5px; display: inline-block; margin-bottom: 20px;">
-      <h1 style="color: #2d89ef; font-size: 36px; letter-spacing: 2px;">${otp}</h1>
+    
+    <div style="background-color: #282828; padding: 24px; border-radius: 8px; display: inline-block; margin-bottom: 32px;">
+      <h1 style="color: #1DB954; font-size: 40px; letter-spacing: 8px; margin: 0; font-weight: bold;">
+        ${otp}
+      </h1>
     </div>
-    <p style="font-size: 14px; color: #555; margin-bottom: 20px;">
-      If you did not sign up for this account, please ignore this email.
+    
+    <p style="font-size: 14px; color: #B3B3B3; margin-bottom: 24px; line-height: 1.5;">
+      This code will expire in 30 minutes. If you didn't request this email, you can safely ignore it.
     </p>
-    <p style="font-size: 12px; color: #aaa;">
-      Need help? Contact our support team at <a href="mailto:support@example.com" style="color: #2d89ef;">support@example.com</a>.
-    </p>
+    
+    <div style="border-top: 1px solid #282828; padding-top: 24px; margin-top: 32px;">
+      <p style="font-size: 14px; color: #B3B3B3; margin-bottom: 16px;">
+        Need help? Visit <a href="https://support.spotify.com" style="color: #1DB954; text-decoration: none;">Spotify Support</a>
+      </p>
+      
+      <p style="font-size: 12px; color: #6A6A6A; line-height: 1.5;">
+        This email was sent to you by Spotify. To learn more about how Spotify processes personal data, please visit our <a href="https://www.spotify.com/privacy" style="color: #1DB954; text-decoration: none;">Privacy Policy</a>.
+      </p>
+    </div>
   </div>
-  <p style="font-size: 12px; color: #aaa; margin-top: 20px;">
-    &copy; ${new Date().getFullYear()} Our Platform. All rights reserved.
-  </p>
+  
+  <div style="margin-top: 24px; color: #6A6A6A; font-size: 12px;">
+    Spotify AB, Regeringsgatan 19, 111 53, Stockholm, Sweden
+  </div>
 </div>
 
  `;
@@ -135,9 +156,7 @@ const userLogin = async (req, res, next) => {
   // Check if the user is blocked
   if (user.blocked) {
     console.log("Blocked user attempted login:", email);
-    return next(
-      new CustomError("Your account has been blocked", 403)
-    );
+    return next(new CustomError("Your account has been blocked", 403));
   }
 
   // Check if the password is correct

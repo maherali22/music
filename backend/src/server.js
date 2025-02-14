@@ -12,17 +12,22 @@ dotenv.config();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "http://localhost:4000",
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods:"GET, POST, PUT, DELETE"
   })
 );
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+//routes
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
+
+//404 route
 app.all("*", (req, res, next) => {
   next(new CustomError(`${req.originalUrl} route not found`, 404));
 });
