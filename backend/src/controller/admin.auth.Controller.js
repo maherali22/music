@@ -6,14 +6,14 @@ import { loginValidation } from "../models/joichema/joischema.js";
 const adminLogin = async (req, res, next) => {
   const { error, value } = loginValidation.validate(req.body);
   if (error) {
-    return next(new CustomError("admin not found", 400));
+    return next(new CustomError("Invalid input format", 400));
   }
+
   const { email, password } = value;
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (email === adminEmail && password === adminPassword) {
-    console.log("admin logged in successfully");
     const token = jwt.sign(
       { id: "admin", isAdmin: true },
       process.env.JWT_KEY,
@@ -24,6 +24,7 @@ const adminLogin = async (req, res, next) => {
       process.env.JWT_KEY,
       { expiresIn: "7d" }
     );
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
@@ -36,13 +37,17 @@ const adminLogin = async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "none",
     });
+
     res.status(200).json({
       success: true,
-      message: "admin logged in successfully",
+      message: "Admin logged in successfully",
       token,
+      refreshmentToken,
+      adminName: "admin",
+      isAdmin: true,
     });
   } else {
-    return next(new CustomError("admin not found", 400));
+    return next(new CustomError("Invalid email or password", 401));
   }
 };
 
@@ -52,7 +57,8 @@ const adminLogout = async (req, res, next) => {
   res.clearCookie("refreshmentToken");
   res.status(200).json({
     success: true,
-    message: "admin logged out successfully",
+    message: "Admin logged out successfully",
   });
 };
-export { adminLogin , adminLogout};
+
+export { adminLogin, adminLogout };

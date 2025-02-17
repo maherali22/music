@@ -22,7 +22,7 @@ const playlistSlice = createSlice({
     builder
       .addCase(getPlaylist.pending, (state) => {
         state.status = "pending";
-        state.error = null; // Clear previous errors when a new request starts
+        state.error = null;
       })
       .addCase(getPlaylist.fulfilled, (state, action) => {
         state.status = "fulfilled";

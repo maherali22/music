@@ -138,18 +138,12 @@ const deletePlaylist = async (req, res, next) => {
 //6. get playlist by user
 
 const getPlaylist = async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.user.id;
   const playlist = await Playlist.find({ user: id }).populate("songs");
-
   if (!playlist) {
-    return next(new CustomError("Playlist not found", 404));
+    return next(new CustomError("playlist not found", 400));
   }
-
-  res.status(200).json({
-    success: true,
-    message: "Playlist fetched successfully",
-    data: playlist,
-  });
+  res.status(200).json(playlist);
 };
 
 export {

@@ -202,8 +202,16 @@ const userLogin = async (req, res, next) => {
   res.status(200).json({
     message: "Login successful",
     data: {
-      user: user.name,
-      profilePicture: user.profilePic,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+        admin: user.admin,
+        isVerified: user.isVerified,
+        likedSongs: user.likedSongs,
+        blocked: user.blocked,
+      },
       token,
       refreshmentToken,
     },
@@ -261,16 +269,23 @@ const editUserProfile = async (req, res, next) => {
     updatedFields.profilePic = req.files.profilePic[0]?.path;
   }
 
-  const user = await User.findByIdAndUpdate(id, updatedFields, { new: true });
-  if (!user) {
-    return next(new CustomError("User not found", 404));
-  }
+  const user = await User.findByIdAndUpdate(id, updatedFields, {
+    new: true,
+    select: "-password -otp -__v", // Exclude sensitive fields
+  });
 
   res.status(200).json({
     errorcode: 0,
     status: true,
     msg: "User profile updated successfully",
-    user,
+    data: {
+      name: user.name,
+      profilePicture: user.profilePic,
+      email: user.email,
+      _id: user._id,
+      admin: user.admin,
+      isVerified: user.isVerified,
+    },
   });
 };
 export {

@@ -14,8 +14,8 @@ const initialValues = {
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const error = useSelector((state) => state.auth.error);
-  const status = useSelector((state) => state.auth.status);
+  const error = useSelector((state) => state.user.error);
+  const status = useSelector((state) => state.user.status);
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
@@ -80,9 +80,7 @@ const Login = () => {
               className="w-full px-4 py-3 rounded bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             {errors.email && touched.email && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.email}
-              </p>
+              <p className="text-red-500 text-xs mt-2">{errors.email}</p>
             )}
           </div>
 
@@ -111,9 +109,7 @@ const Login = () => {
               )}
             </button>
             {errors.password && touched.password && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.password}
-              </p>
+              <p className="text-red-500 text-xs mt-2">{errors.password}</p>
             )}
           </div>
 

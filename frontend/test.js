@@ -1,3 +1,40 @@
+<div className="bg-black p-5 overflow-hidden sm:p-6 md:p-4 lg:p-8">
+<div className="">
+  <Navbar />
+</div>
+
+<div className="flex flex-col md:flex-row">
+  <div className="hidden sm:w-1/4 lg:w-1/5 sm:block">
+    <Sidebar />
+  </div>
+
+  <div className="flex-1 overflow-y-auto h-screen p-5 bg-stone-950 scrollbar-none">
+    {user && (
+      <div className="p-0 sm:p-6">
+        <Dives />
+      </div>
+    )}
+    <div className="p-0">
+      <Playlist />
+    </div>
+    <div className="p-0">
+      <Artist />
+    </div>
+    <div className="p-0">
+      <Album />
+    </div>
+  </div>
+</div>
+<div className="fixed bottom-0 left-0 w-full z-50">
+  <Smnavbar />
+</div>
+</div>
+
+
+
+//////////////////////////////////////////////////////
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../../../axiosinstance";
 
@@ -103,10 +140,20 @@ const userSlice = createSlice({
           user: action.payload.user,
           token: action.payload.token,
           refreshmentToken: action.payload.refreshmentToken,
-          profilePicture: action.payload.user.profilePic || "",
-          id: action.payload.user._id || "",
-          admin: action.payload.user.admin || false,
+          profilePicture:
+            action.payload.profilePicture || action.payload.user.profilePic,
+          id: action.payload._id || action.payload.user._id,
+          admin: action.payload.admin || action.payload.user.admin,
         };
+
+        // If the user data comes in as a string, try to parse it
+        if (typeof userData.user === "string") {
+          try {
+            userData.user = JSON.parse(userData.user);
+          } catch (error) {
+            console.error("Failed to parse user data:", error);
+          }
+        }
 
         // Ensure default values for missing fields
         userData.user = {
@@ -124,11 +171,10 @@ const userSlice = createSlice({
         state.status = "fulfilled";
         state.token = userData.token;
         state.refreshmentToken = userData.refreshmentToken;
-        state.profilePicture = userData.profilePic;
+        state.profilePicture = userData.profilePicture;
         state.admin = userData.admin;
         state.id = userData.id;
 
-        // Persist user data in localStorage
         localStorage.setItem("currentUser", JSON.stringify(userData.user));
         localStorage.setItem("token", userData.token);
         localStorage.setItem("refreshmentToken", userData.refreshmentToken);
@@ -138,7 +184,6 @@ const userSlice = createSlice({
         );
         localStorage.setItem("admin", userData.admin);
       })
-
       .addCase(userLogin.rejected, (state, action) => {
         state.user = null;
         state.status = "rejected";
@@ -152,8 +197,7 @@ const userSlice = createSlice({
         state.user = {
           ...state.user,
           name: action.payload.name,
-          profilePic:
-            action.payload.profilePicture || action.payload.profilePic,
+          profilePic: action.payload.profilePicture || action.payload.profilePic,
         };
         state.status = "fulfilled";
 
@@ -171,3 +215,7 @@ const userSlice = createSlice({
 
 export const { logout } = userSlice.actions;
 export default userSlice.reducer;
+
+
+
+////////////////////////////////////////////////

@@ -1,24 +1,52 @@
 import { useEffect, useState } from "react";
-import { FaSpotify, FaSearch, FaUser, FaCog, FaDownload } from "react-icons/fa";
+import {
+  FaSpotify,
+  FaSearch,
+  FaUser,
+  FaCog,
+  FaDownload,
+  FaHome,
+} from "react-icons/fa";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../../Redux/slice/user.Slice/authSlice";
+import { adminLogout } from "../../../Redux/slice/admin.Slice/adminAuthSlice";
+import { getAllUsers } from "../../../Redux/slice/admin.Slice/adminUserSlice";
+import { getAllSongs } from "../../../Redux/slice/user.Slice/songSlice";
+import { persistor } from "../../../Redux/store/store";
+import Searchbar from "./serachBar";
 
 const Navbar = () => {
-  const { user, profilePicture } = useSelector((state) => state.auth);
+  const { user} = useSelector((state) => state.user);
+  const admin = useSelector((state) => state.admin?.user);
+  const { songs, status } = useSelector((state) => state.song);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logout());
-
+    if (user) {
+      dispatch(logout());
+      persistor.purge().then(() => {
+        localStorage.clear();
+      });
+    } else if (admin) {
+      dispatch(adminLogout());
+      persistor.purge().then(() => {
+        localStorage.clear();
+      });
+    }
     navigate("/");
-
     setIsDropdownOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+    dispatch(getAllSongs());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!user) navigate("/");
@@ -26,30 +54,33 @@ const Navbar = () => {
 
   return (
     <nav className="bg-black h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between fixed w-full top-0 z-50">
-      <div className="flex items-center gap-4 ml-auto">
+      {/* Left Section */}
+      <div className="flex items-center gap-4">
         <button
-          className="text-white lg:hidden  "
+          className="text-white lg:hidden"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
         <Link to="/" className="flex items-center gap-2">
           <FaSpotify className="text-green-500 text-3xl" />
-          <span className="text-white font-bold text-xl hidden lg:block">
+          <span className="text-white font-bold text-xl hidden md:block">
             Spotify
           </span>
         </Link>
       </div>
 
-      {/* Center Section - Search Bar (Desktop) */}
+      {/* Center Section - Desktop Search Bar */}
       <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
+        <Link
+          to="/"
+          className="flex items-center text-white bg-stone-900 hover:scale-110 transform transition duration-500 p-2 rounded-full mr-5"
+        >
+          <FaHome size={24} />
+        </Link>
         <div className="w-full flex items-center bg-white/10 rounded-full px-4 py-2 gap-3 text-gray-400 hover:bg-white/15 transition-colors">
           <FaSearch size={20} />
-          <input
-            type="text"
-            placeholder="What do you want to play?"
-            className="bg-transparent flex-1 text-sm text-white placeholder-gray-400 focus:outline-none"
-          />
+          <Searchbar songs={songs} status={status} />
         </div>
       </div>
 
@@ -85,9 +116,9 @@ const Navbar = () => {
               className="flex items-center gap-2 bg-black hover:bg-white/10 rounded-full p-1 pr-2 transition-colors"
             >
               <div className="w-8 h-8 rounded-full bg-gray-700 overflow-hidden">
-                {profilePicture ? (
+                {user.profilePicture ? (
                   <img
-                    src={profilePicture}
+                    src={user.profilePicture}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -144,7 +175,7 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile Menu - Right Side Slide-out */}
+      {/* Mobile Menu - Slide-out */}
       {isMobileMenuOpen && (
         <div className="fixed top-0 left-0 h-full w-64 bg-black lg:hidden p-4 border-r border-white/10 z-50">
           <div className="mb-4">
@@ -157,7 +188,6 @@ const Navbar = () => {
               />
             </div>
           </div>
-
           <div className="flex flex-col gap-2 text-gray-300">
             <Link to="/premium" className="py-2 hover:text-white">
               Premium
@@ -168,7 +198,6 @@ const Navbar = () => {
             <Link to="/download" className="py-2 hover:text-white">
               Download
             </Link>
-
             {user ? (
               <>
                 <Link to="/account" className="py-2 hover:text-white">
