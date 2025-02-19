@@ -18,7 +18,7 @@ import { persistor } from "../../../Redux/store/store";
 import Searchbar from "./serachBar";
 
 const Navbar = () => {
-  const { user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const admin = useSelector((state) => state.admin?.user);
   const { songs, status } = useSelector((state) => state.song);
 
@@ -40,6 +40,7 @@ const Navbar = () => {
       });
     }
     navigate("/");
+    window.location.reload();
     setIsDropdownOpen(false);
   };
 

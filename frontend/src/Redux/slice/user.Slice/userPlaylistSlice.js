@@ -1,15 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../../../axiosinstance";
 
-const getUserPlaylist = createAsyncThunk(
+// Fetch user playlists
+export const getUserPlaylist = createAsyncThunk(
   "playlist/getUserPlaylist",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/user/get-playlist");
-      if (!response.data) {
-        throw new Error("No data received");
-      }
-      console.log("playlist data:", response.data);
+      if (!response.data) throw new Error("No data received");
+      console.log("Playlist data:", response.data);
       return response.data;
     } catch (error) {
       console.error("API error:", error);
@@ -20,52 +19,58 @@ const getUserPlaylist = createAsyncThunk(
   }
 );
 
-const createPlaylist = createAsyncThunk(
+// Create playlist
+export const createPlaylist = createAsyncThunk(
   "playlist/createPlaylist",
-  async ({ playlistName, songsId }) => {
+  async ({ playlistName, songsId }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/user/create-playlist", {
         playlistName,
         songs: songsId,
       });
-      console.log(response.data.data);
       return response.data.data;
     } catch (error) {
-      console.log(error);
+      console.error("API error:", error);
+      return rejectWithValue(
+        error.response?.data || "Failed to create playlist"
+      );
     }
   }
 );
 
-const deletePlaylist = createAsyncThunk(
+// Delete playlist
+export const deletePlaylist = createAsyncThunk(
   "playlist/deletePlaylist",
-  async ({ playlistId }) => {
+  async ({ playlistId }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
         `/user/delete-playlist/${playlistId}`
       );
       return response.data.data;
     } catch (error) {
-      console.log(error);
+      console.error("API error:", error);
+      return rejectWithValue(
+        error.response?.data || "Failed to delete playlist"
+      );
     }
   }
 );
 
-const deleteSongFromPlaylist = createAsyncThunk(
+// Delete song from playlist
+export const deleteSongFromPlaylist = createAsyncThunk(
   "playlist/deleteSongFromPlaylist",
-  async ({ playlistId, songId }) => {
+  async ({ playlistId, songId }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
         "/user/delete-song-from-playlist",
-        {
-          data: {
-            playlistId,
-            songId,
-          },
-        }
+        { data: { playlistId, songId } }
       );
       return response.data.data;
     } catch (error) {
-      console.log(error);
+      console.error("API error:", error);
+      return rejectWithValue(
+        error.response?.data || "Failed to delete song from playlist"
+      );
     }
   }
 );
@@ -96,9 +101,3 @@ const userPlaylistSlice = createSlice({
 });
 
 export default userPlaylistSlice.reducer;
-export {
-  getUserPlaylist,
-  createPlaylist,
-  deletePlaylist,
-  deleteSongFromPlaylist,
-};

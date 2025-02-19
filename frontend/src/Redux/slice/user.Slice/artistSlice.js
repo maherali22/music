@@ -3,7 +3,7 @@ import axiosInstance from "../../../../axiosinstance";
 
 const getArtist = createAsyncThunk("artist/getArtist", async () => {
   try {
-    const response = await axiosInstance.get("/get-artist");
+    const response = await axiosInstance.get("/user/get-artist");
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -36,5 +36,4 @@ const artistSlice = createSlice({
 
 export default artistSlice.reducer;
 export { getArtist };
-// Path: frontend/src/Redux/slice/user.Slice/user.Slice.js
-// Compare this snippet from backend/src/controller/admin.User.controller.js:
+

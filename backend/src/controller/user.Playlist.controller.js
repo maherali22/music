@@ -47,33 +47,40 @@ const createPlaylist = async (req, res, next) => {
 //2. get all playlist
 
 const getAllPlaylist = async (req, res, next) => {
-  const playlist = await Playlist.find().populate("songs");
+  try {
+    // Fetch all playlists and populate the songs field
+    const playlists = await Playlist.find().populate("songs");
 
-  if (!playlist || playlist.length === 0) {
-    return next(new CustomError("Playlist not found", 404));
+    if (!playlists || playlists.length === 0) {
+      return next(new CustomError("Playlist not found", 404));
+    }
+
+    // Format playlists by converting each song's duration to mm:ss format
+    const formattedPlaylists = playlists.map((playlist) => {
+      return {
+        ...playlist.toObject(),
+        songs: playlist.songs.map((song) => {
+          const min = Math.floor(song.duration / 60);
+          const sec = song.duration % 60;
+          const formattedDuration = `${min}:${sec < 10 ? "0" : ""}${sec}`;
+
+          return {
+            ...song.toObject(),
+            duration: formattedDuration,
+          };
+        }),
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Playlist fetched successfully",
+      data: formattedPlaylists,
+    });
+  } catch (error) {
+    // Pass any errors to the error handler middleware
+    next(error);
   }
-
-  const formattedPlaylist = playlist.map((playlist) => {
-    return {
-      ...playlist.toObject(),
-      songs: playlist.songs.map((song) => {
-        const min = Math.floor(song.duration / 60);
-        const sec = song.duration % 60;
-        const formattedDuration = `${min}:${sec < 10 ? "0" : ""}${sec}`;
-
-        return {
-          ...song.toObject(),
-          duration: formattedDuration,
-        };
-      }),
-    };
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Playlist fetched successfully",
-    data: formattedPlaylist,
-  });
 };
 
 //3. get playlist by id

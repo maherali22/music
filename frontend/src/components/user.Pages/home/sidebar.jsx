@@ -28,6 +28,7 @@ const SpotifySidebar = () => {
   const userPlaylist = useSelector(
     (state) => state.userPlaylist.userPlaylist || []
   );
+
   const user = localStorage.getItem("currentUser");
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const SpotifySidebar = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen gap-2 p-2 bg-black overflow-y-auto">
+    <div className="flex flex-col mt-[60px] h-[680px] gap-2 p-2 bg-black overflow-y-auto">
       {/* Library Section */}
       <div className="flex-1 bg-neutral-900 rounded-lg overflow-hidden">
         {/* Library Header */}
@@ -86,7 +87,7 @@ const SpotifySidebar = () => {
         </div>
 
         {/* Library Filters */}
-        <div className="bg-[#1F1F1F] text-white rounded-lg shadow-md p-5 w-64">
+        <div className="bg-[#1F1F1F] text-white rounded-lg shadow-md p-6 ml-2 mb-2 w-64">
           <div className="text-center">
             <h2 className="text-lg font-bold mb-2">
               Create your first playlist

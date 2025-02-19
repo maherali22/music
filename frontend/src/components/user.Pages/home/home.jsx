@@ -4,6 +4,11 @@ import Sidebar from "./sidebar";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getPlaylist } from "../../../Redux/slice/user.Slice/playlistSlice";
+import Dashboard from "./dashboard";
+import Playlist from "./playlist";
+import Bar from "./bar";
+import Artist from "./artist";
+import Album from "./album";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -21,11 +26,30 @@ const Home = () => {
         <Navbar />
       </div>
 
-      <div className="flex mt-16">
+      <div className="flex  flex-col md:flex-row">
         {/* Sidebar */}
-        <div className="hidden sm:block sm:w-1/4 lg:w-1/5 bg-neutral-900 h-screen overflow-y-auto">
+        <div className="hidden sm:w-1/4 lg:w-1/5 sm:block">
           <Sidebar />
         </div>
+        {/*dashboard */}
+        <div className="flex-1 overflow-y-auto h-screen p-5 bg-stone-950 scrollbar-none">
+          {user && (
+            <div className="p-0 sm:p-6">
+              <Dashboard />
+            </div>
+          )}
+
+          <div className="p-0">
+            <Playlist />
+          </div>
+          <div><Artist /></div>
+          <div className="p-0">
+            {/* <Album /> */}
+          </div>
+        </div>
+      </div>
+      <div className="fixed bottom-0 left-0 w-full z-50">
+        <Bar />
       </div>
     </div>
   );

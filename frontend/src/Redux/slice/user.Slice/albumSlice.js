@@ -3,8 +3,8 @@ import axiosInstance from "../../../../axiosinstance";
 
 const getAlbums = createAsyncThunk("album/getAlbums", async () => {
   try {
-    const response = await axiosInstance.get("/get-album");
-    return response.data;
+    const response = await axiosInstance.get("/user/get-album");
+    return response.data.data;
   } catch (error) {
     console.log(error);
   }

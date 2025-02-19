@@ -6,6 +6,8 @@ import { Routes, Route } from "react-router-dom";
 import OtpVerify from "./components/user.Pages/auth/otpVerification.jsx";
 import Login from "./components/user.Pages/auth/login.jsx";
 import Home from "./components/user.Pages/home/home.jsx";
+import PlaylistComponent from "./components/user.Pages/music/playlistComponent.jsx";
+import MusicController from "./components/user.Pages/music/musicPlayer.jsx";
 
 function App() {
   return (
@@ -15,6 +17,18 @@ function App() {
         <Route path="/otp-verify" element={<OtpVerify />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
+        <Route
+          path="/artist/playcomponent/:id1/:id2"
+          element={<MusicController />}
+        />
+        <Route
+          path="/playlist/playlcomponent/:id"
+          element={<PlaylistComponent />}
+        />
+        <Route
+          path="/userplaylist/playcomponent/:userplaylists"
+          element={<PlaylistComponent />}
+        />
       </Routes>
     </div>
   );

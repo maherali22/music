@@ -28,7 +28,6 @@ const persistConfig = {
   key: "root", // Root key for the persisted state
   storage, // Use localStorage
   whitelist: ["user", "playlist", "admin", "userPlaylist"],
-  version: 1, // Persist these slices
 };
 
 // Combine reducers

@@ -1,18 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../../../axiosinstance";
 
-const getPlaylist = createAsyncThunk("playlist/getPlaylist", async () => {
-  try {
-    const response = await axiosInstance.get("/user/get-all-playlist");
-    return response.data.data;
-  } catch (error) {
-    console.log(error);
+export const getPlaylist = createAsyncThunk(
+  "playlist/getPlaylist",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get("/user/get-all-playlist");
+      return response.data.data;
+    } catch (error) {
+      // Reject with error payload to be handled in extraReducers
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 const playlistSlice = createSlice({
   name: "playlist",
   initialState: {
+    // You might consider renaming this to 'playlists' for clarity
     playlist: [],
     status: "none",
     error: null,
@@ -36,4 +41,3 @@ const playlistSlice = createSlice({
 });
 
 export default playlistSlice.reducer;
-export { getPlaylist };
