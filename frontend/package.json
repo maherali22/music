@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.0.0",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
+    "daisyui": "^4.12.23",
     "dotenv": "^16.4.7",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.2",

@@ -26,6 +26,7 @@ const MusicController = () => {
 
   // Redux state selectors
   const artist = useSelector((state) => state.artist.artist);
+  console.log("sd", artist)
   const playlist = useSelector((state) => state.playlist.playlist);
   const likedSongs = useSelector((state) => state.likedSong.likedSongs);
   const allSongs = useSelector((state) => state.song.songs);
