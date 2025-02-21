@@ -15,5 +15,5 @@ const likedSongSchema = new mongoose.Schema({
   ],
 });
 
-const LikedSong = mongoose.model("LikedSong", likedSongSchema);
+const LikedSong = mongoose.model("LikedSongs", likedSongSchema);
 export default LikedSong;
