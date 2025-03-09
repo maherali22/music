@@ -3,12 +3,12 @@ const ErrorManager = (err, req, res, next) => {
   const message = err.message || "internal server error";
   console.log(err);
   const status = err.status || "error";
-
+  console.log();
   return res.status(statusCode).json({
     statusCode,
     message,
     status,
-    data
+    data,
   });
 };
 export default ErrorManager;
