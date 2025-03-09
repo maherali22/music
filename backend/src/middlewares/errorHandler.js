@@ -8,6 +8,7 @@ const ErrorManager = (err, req, res, next) => {
     statusCode,
     message,
     status,
+    data
   });
 };
 export default ErrorManager;
